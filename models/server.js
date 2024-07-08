@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import router from '../routes/usuarios.js'
+import {dbConecction} from '../database/config.js'
 
 class Server{
 
@@ -10,12 +11,20 @@ class Server{
         this.port = process.env.PORT || 3000 //iniciamos el puerto de la varible de entorno
         this.corsOptions=this.cosrSeguridad()
         this.usuariosRoutePath = '/api/usuarios'
+
+        //Conectar a base de datos
+        this.conectarDB()
+
         //Middlewares
         this.middlewares()
 
         //Rutas de la aplicacion
         this.routes()// cargamos las rutas de nuestro routes
 
+    }
+
+    async conectarDB(){
+        await dbConecction()
     }
 
     middlewares(){
@@ -35,11 +44,11 @@ class Server{
     }
 
     cosrSeguridad(){
-        console.log(process.env.URL_CONFIRMAR)
+        //console.log(process.env.URL_CONFIRMAR)
         var whitelist = [process.env.URL_CONFIRMAR]
         var corsOptions = {
             origin: function (origin, callback) {
-                console.log(whitelist.indexOf(origin))
+                //console.log(whitelist.indexOf(origin))
                 if (whitelist.indexOf(origin) !== -1) {
                 callback(null, true)
                 } else {
