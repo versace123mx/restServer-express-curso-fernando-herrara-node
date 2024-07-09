@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import router from '../routes/usuarios.js'
+import routerAuth from '../routes/auth.js'
 import {dbConecction} from '../database/config.js'
 
 class Server{
@@ -11,6 +12,7 @@ class Server{
         this.port = process.env.PORT || 3000 //iniciamos el puerto de la varible de entorno
         this.corsOptions=this.cosrSeguridad()
         this.usuariosRoutePath = '/api/usuarios'
+        this.authPath = '/api/auth'
 
         //Conectar a base de datos
         this.conectarDB()
@@ -34,6 +36,7 @@ class Server{
     }
 
     routes(){
+        this.app.use(this.authPath,routerAuth)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/auth y en router ahi estan los metodos
         this.app.use(this.usuariosRoutePath,router)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/usuarios y en router ahi estan los metodos
     }
 

@@ -63,7 +63,7 @@ const usuariosPatch  = (req,res) => {
 const usuariosDelete = async (req,res) => {
     const {id} = req.params
     const usuario = await Usuario.findByIdAndUpdate(id,{estado:false})
-    res.status(200).json({ msg: `Usuario id: ${id} eliminado correctamente.` });
+    res.status(200).json({ usuario });
 }
 
 export {

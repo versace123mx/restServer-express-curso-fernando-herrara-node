@@ -1,8 +1,12 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
 import { usuariosGet, usuariosPost, usuariosPut, usuariosPatch, usuariosDelete } from '../controllers/usuarios.js'
-import { validarCampos } from '../middlewares/validar-campos.js'
+
 import { esRolvalido,emailExiste,userExistById } from '../helpers/db-validators.js'
+
+import { validarCampos } from '../middlewares/validar-campos.js'
+import validarJWT from '../middlewares/validar-jwt.js'
+import { esAdminRole, tieneRole }  from '../middlewares/validar-roles.js'
 
 const router = Router();
 
@@ -30,7 +34,11 @@ router.put('/:id',[
 
 
 router.patch('/',usuariosPatch)
+
 router.delete('/:id',[
+    validarJWT,
+    //esAdminRole,
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id').custom(userExistById),//validacion que el id tenga las caracteristicas de mongo y que exista en la db
     validarCampos
 ],usuariosDelete)

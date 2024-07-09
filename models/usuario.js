@@ -33,9 +33,10 @@ const UsuarioSchema = mongoose.Schema({
     }
 
 })
-//Retornamos solo los datos que nesecitamos ver no el passsword, no el __v, esto es del Schema
+//Retornamos solo los datos que nesecitamos ver no el passsword, no el __v, no _id esto es del Schema y al _id le cambiamos el nombre visualmente
 UsuarioSchema.methods.toJSON = function(){
-    const {__v, password, ...usuario} = this.toObject();
+    const {__v, password,_id, ...usuario} = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 
