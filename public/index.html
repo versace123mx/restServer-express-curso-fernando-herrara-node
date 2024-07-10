@@ -17,7 +17,9 @@
     </div>
     <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
     </div>
-
+    <button id="google_singout">
+        Singout
+    </button>
     <script src="https://accounts.google.com/gsi/client" async></script>
     <script>
         function handleCredentialResponse(response) {
@@ -32,9 +34,18 @@
             .then(response => response.json())
             .then(resp => {
                 console.log(resp)
+                localStorage.setItem('email', resp.usuario.correo)
             })
             .catch(console.warn)
         }
+
+        const button = document.querySelector("#google_singout")
+        button.addEventListener("click", () => {
+            google.accounts.id.revoke(localStorage.getItem('email'), done =>{
+                localStorage.clear()
+                location.reload()
+            })
+        })
       </script>
 </body>
 </html>
