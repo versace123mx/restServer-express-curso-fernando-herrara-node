@@ -48,11 +48,11 @@ class Server{
 
     cosrSeguridad(){
         //console.log(process.env.URL_CONFIRMAR)
-        var whitelist = [process.env.URL_CONFIRMAR]
+        var whitelist = [process.env.URL_CONFIRMAR,process.env.URL_GOOGLE_LONGIN]
         var corsOptions = {
             origin: function (origin, callback) {
                 //console.log(whitelist.indexOf(origin))
-                if (whitelist.indexOf(origin) !== -1) {
+                if (whitelist.indexOf(origin) !== -1 || !origin) {
                 callback(null, true)
                 } else {
                     callback(new Error('No permitido por CORS'))

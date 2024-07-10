@@ -1,11 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso denegado</title>
 </head>
+
 <body>
     <h1>Acceso denegado</h1>
+    <div    id="g_id_onload"
+            data-client_id="323857418568-d5khmhc1n62kt9qdm1dg2dar2abi9gps.apps.googleusercontent.com"
+            data-auto_prompt="false"
+            data-callback="handleCredentialResponse"
+            >
+    </div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script>
+        function handleCredentialResponse(response) {
+            const body = { id_token:response.credential}
+            fetch('http://localhost:3000/api/auth/google',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(body)
+            })
+            .then(response => response.json())
+            .then(resp => {
+                console.log(resp)
+            })
+            .catch(console.warn)
+        }
+      </script>
 </body>
 </html>
