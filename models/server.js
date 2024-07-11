@@ -5,6 +5,7 @@ import router from '../routes/usuarios.js'
 import routerAuth from '../routes/auth.js'
 import routerCategorias from '../routes/categorias.js'
 import routerProductos from '../routes/productos.js'
+import routerSearch from '../routes/buscar.js'
 
 import {dbConecction} from '../database/config.js'
 
@@ -19,6 +20,7 @@ class Server{
         this.authPath = '/api/auth'
         this.categorias = '/api/categorias'
         this.productos = '/api/productos'
+        this.buscar = '/api/buscar'
 
         //Conectar a base de datos
         this.conectarDB()
@@ -46,6 +48,7 @@ class Server{
         this.app.use(this.usuariosRoutePath,router)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/usuarios y en router ahi estan los metodos
         this.app.use(this.categorias,routerCategorias)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/categorias y en router ahi estan los metodos
         this.app.use(this.productos,routerProductos)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/productos y en router ahi estan los metodos
+        this.app.use(this.buscar,routerSearch)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/buscar y en router ahi estan los metodos
     }
 
     listen(){
@@ -60,7 +63,7 @@ class Server{
         var corsOptions = {
             origin: function (origin, callback) {
                 //console.log(whitelist.indexOf(origin))
-                if (whitelist.indexOf(origin) !== -1 || !origin) {
+                if (whitelist.indexOf(origin) !== -1) {
                 callback(null, true)
                 } else {
                     callback(new Error('No permitido por CORS'))
