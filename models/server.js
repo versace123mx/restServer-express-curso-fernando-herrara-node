@@ -4,6 +4,7 @@ import cors from 'cors'
 import router from '../routes/usuarios.js'
 import routerAuth from '../routes/auth.js'
 import routerCategorias from '../routes/categorias.js'
+import routerProductos from '../routes/productos.js'
 
 import {dbConecction} from '../database/config.js'
 
@@ -17,6 +18,7 @@ class Server{
         this.usuariosRoutePath = '/api/usuarios'
         this.authPath = '/api/auth'
         this.categorias = '/api/categorias'
+        this.productos = '/api/productos'
 
         //Conectar a base de datos
         this.conectarDB()
@@ -42,7 +44,8 @@ class Server{
     routes(){
         this.app.use(this.authPath,routerAuth)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/auth y en router ahi estan los metodos
         this.app.use(this.usuariosRoutePath,router)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/usuarios y en router ahi estan los metodos
-        this.app.use(this.categorias,routerCategorias)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/usuarios y en router ahi estan los metodos
+        this.app.use(this.categorias,routerCategorias)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/categorias y en router ahi estan los metodos
+        this.app.use(this.productos,routerProductos)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/productos y en router ahi estan los metodos
     }
 
     listen(){
