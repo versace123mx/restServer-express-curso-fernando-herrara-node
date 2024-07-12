@@ -27,8 +27,17 @@ const userExistById = async (id) => {
     }
 }
 
+const coleccionesPermitidas = (coleccion,colecciones=[])=>{
+    const incluida = colecciones.includes(coleccion)
+    if(!incluida){
+        throw new Error(`La coleccion ${coleccion} no es permitida, se permiten, ${colecciones}`)
+    }
+
+    return true
+}
 export{
     esRolvalido,
     emailExiste,
-    userExistById
+    userExistById,
+    coleccionesPermitidas
 }

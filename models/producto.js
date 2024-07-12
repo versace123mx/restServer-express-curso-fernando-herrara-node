@@ -37,6 +37,9 @@ const ProductoSchema = mongoose.Schema({
     disponible:{
         type: Boolean,
         default: true
+    },
+    imagen:{
+        type: String,
     }
 })
 

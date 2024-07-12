@@ -1,11 +1,14 @@
 import express from 'express'
 import cors from 'cors'
+import fileUpload from 'express-fileupload'
 
 import router from '../routes/usuarios.js'
 import routerAuth from '../routes/auth.js'
 import routerCategorias from '../routes/categorias.js'
 import routerProductos from '../routes/productos.js'
 import routerSearch from '../routes/buscar.js'
+import routerUpload from '../routes/uploads.js'
+import routerUploadCloudinary from '../routes/uploadscloudinary.js'
 
 import {dbConecction} from '../database/config.js'
 
@@ -21,6 +24,8 @@ class Server{
         this.categorias = '/api/categorias'
         this.productos = '/api/productos'
         this.buscar = '/api/buscar'
+        this.upload = '/api/upload'
+        this.uploadCloudinary = '/api/upload/cloudinary'
 
         //Conectar a base de datos
         this.conectarDB()
@@ -41,6 +46,12 @@ class Server{
         this.app.use(cors(this.corsOptions))
         this.app.use(express.static('public')) //Directorio publico y es el que siempre se ejecuta en un principio en la carpeta publica del path /
         this.app.use(express.json()); //Habilitamos las respuestas json a un que asiendo pruebas no pasa nada si esta esto o no, actualizacion esto sirve para cuando nos mandan datos de tipo json, nuestro sistema sea capaz de entender que estamos recibiendo datos en formato json
+
+        //FileUpload carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+        }))
     }
 
     routes(){
@@ -49,6 +60,8 @@ class Server{
         this.app.use(this.categorias,routerCategorias)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/categorias y en router ahi estan los metodos
         this.app.use(this.productos,routerProductos)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/productos y en router ahi estan los metodos
         this.app.use(this.buscar,routerSearch)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/buscar y en router ahi estan los metodos
+        this.app.use(this.upload,routerUpload)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/upload y en router ahi estan los metodos
+        this.app.use(this.uploadCloudinary,routerUploadCloudinary)//le decimos donde estan las rutas del endpoind el endpoint de entrada es /api/upload/cloudinary y en router ahi estan los metodos
     }
 
     listen(){
