@@ -7,9 +7,9 @@ import { v2 as cloudinary } from 'cloudinary'
 
 dotenv.config();
 cloudinary.config({
-    cloud_name:process.env.cloud_name,
-    api_key:process.env.api_key,
-    api_secret:process.env.api_secret,
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
 });
 
 const cargarArchivo = async (req, res) => {
@@ -44,10 +44,10 @@ const actualizarImagen = async (req, res) => {
     }
 
     //verificamos si tiene el campo imagen, si tiene el campo imagen es por que ya hay una imagen previa
-    if( modelo.imagen ){
-        const pathImage = './uploads/'+coleccion+'/'+modelo.imagen //creamos la ruta de la imagen previa
+    if (modelo.imagen) {
+        const pathImage = './uploads/' + coleccion + '/' + modelo.imagen //creamos la ruta de la imagen previa
         //verificamos si existe la imagen
-        if(fs.existsSync(pathImage)){
+        if (fs.existsSync(pathImage)) {
             fs.unlinkSync(pathImage)//en caso de que la imagen previa exista procedemos a eliminarla
         }
     }
@@ -83,26 +83,25 @@ const actualizarImagenCloudinary = async (req, res) => {
     }
 
     //verificamos si tiene el campo imagen, si tiene el campo imagen es por que ya hay una imagen previa
-    if( modelo.imagen ){
-       
+    if (modelo.imagen) {
+        const nombreArr = modelo.imagen.split('/')
+        const nombre = nombreArr[nombreArr.length - 1]
+        const [public_id] = nombre.split('.')
+        cloudinary.uploader.destroy(public_id)
     }
 
-    const {tempFilePath} = req.files.archivo
+    const { tempFilePath } = req.files.archivo
     try {
-        const resp = await cloudinary.uploader.upload(tempFilePath)
-        res.json({ resp })
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath)
+        modelo.imagen = secure_url
+        await modelo.save({ new: true })
+        res.json({ modelo })
     } catch (error) {
         res.status(400).json(error)
     }
-
-    //const nombre = await subirArchivo(req.files, undefined, coleccion)
-    //modelo.imagen = nombre
-    //await modelo.save({ new: true })
-    
-
 }
 
-const mostrarImagen = async (req, res) =>{
+const mostrarImagen = async (req, res) => {
     const { coleccion, id } = req.params
 
     let modelo
@@ -124,10 +123,10 @@ const mostrarImagen = async (req, res) =>{
     }
 
     //verificamos si tiene el campo imagen, si tiene el campo imagen es por que ya hay una imagen previa
-    if( modelo.imagen ){
+    if (modelo.imagen) {
         const pathImage = `${process.cwd()}/uploads/${coleccion}/${modelo.imagen}` //creamos la ruta de la imagen previa
         //verificamos si existe la imagen
-        if(fs.existsSync(pathImage)){
+        if (fs.existsSync(pathImage)) {
             return res.sendFile(pathImage)
         }
     }
